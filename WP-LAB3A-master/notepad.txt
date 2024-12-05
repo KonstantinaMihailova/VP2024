@@ -1,0 +1,7 @@
+INSERT INTO LOCATION (ID, ADDRESS, CAPACITY, DESCRIPTION, NAME)
+VALUES
+(1, '221B Baker Street, London, UK', 150, 'Historical venue for meetings', 'Sherlock Hall'),
+(2, '1600 Pennsylvania Avenue NW, Washington, DC, USA', 300, 'Large hall for official events', 'White House Hall'),
+(3, '1 Rue de Rivoli, Paris, France', 250, 'Modern conference room', 'Louvre Hall'),
+(4, '4 Chome-2-8 Shibakoen, Minato City, Tokyo, Japan', 400, 'Spacious venue for cultural events', 'Tokyo Tower Hall'),
+(5, 'Sydney Opera House, Bennelong Point, Sydney, Australia', 500, 'Iconic space for performances', 'Opera Hall');
