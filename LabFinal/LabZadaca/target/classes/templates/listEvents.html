@@ -1,0 +1,175 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Event Booking Page - Welcome and Choose an Event</title>
+    <style type="text/css">
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #800000; /* Maroon */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid #982B1C; /* Accent color */
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #800000; /* Maroon */
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #fdfdfd;
+        }
+
+        input[type="submit"] {
+            background-color: #982B1C;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #700000;
+        }
+
+        .error {
+            color: #982B1C;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Event List Styling */
+        div[th\\:each] {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        div[th\\:each] p {
+                           margin: 5px 0;
+                       }
+
+        div[th\\:each] input[type="radio"] {
+                           margin-right: 10px;
+                       }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #777;
+            font-size: 14px;
+            background-color: #f2f2f2;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to Our Event Booking App</h1>
+</header>
+<main>
+    <h2>Search Events:</h2>
+    <form th:method="GET" th:action="@{/events}">
+        <label for="nameSearch">Event Name:</label>
+        <input type="text" id="nameSearch" name="nameSearch">
+
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" name="rating" min="1" max="10">
+
+        <br/>
+        <input type="submit" value="Search">
+    </form>
+    <br/>
+    <form th:method="GET" th:action="@{/events/filterByLocation}">
+        <h2>Filter events by location: </h2>
+        <select id="location" name="location">
+            <option th:each="location : ${locations}"
+                    th:value="${location.getId()}"
+                    th:text="${location.getName()}">
+            </option>
+        </select>
+        <input type="submit" th:value="Filter">
+    </form>
+
+
+    <h2>Available Events:</h2>
+    <form th:method="POST" th:action="@{/eventBooking}">
+        <div th:each="event: ${events}">
+            <input type="radio" th:value="${event.name}" id="name" name="name">
+            <p>
+                <strong>Name:</strong> <span th:text="${event.name}"></span><br/>
+                <strong>Description:</strong> <span th:text="${event.description}"></span><br/>
+                 <strong>Rating:</strong> <span th:text="${event.popularityScore}"></span><br/>
+                <strong>Location:</strong> <span th:text="${event.location.name}"></span><br/>
+            </p>
+            <a th:href="@{'/events/edit-form/{id}' (id=${event.getId()})}">Edit the Event</a>
+            <a th:href="@{'/events/delete/{id}' (id=${event.getId()})}"
+               style="color: red; text-decoration: none;">Delete</a>
+            <a th:href="@{'/events/increase/{id}' (id=${event.getId()})}">Increase rating</a>
+            <a th:href="@{'/events/decrease/{id}' (id=${event.getId()})}">Decrease rating</a>
+
+
+            <!--            <form th:method="POST" th:action="@{/events/increaseRating}">-->
+<!--                <input type="hidden" name="eventId" th:value="${event.getId()}">-->
+<!--                <button type="submit">Increase Rating</button>-->
+<!--            </form>-->
+
+        </div>
+
+        <div th:if="${harError}" class="error"></div>
+        <div th:text="${error}"></div>
+        <h2>Choose Number of Tickets:</h2>
+        <input type="number" name="numTickets" min="1" max="10" required><br/>
+        <br/>
+        <input type="submit" value="Book Now">
+    </form>
+
+    <a href="/events/add-Form">Add new Event</a>
+
+
+</main>
+<footer>
+    &copy; 2025 Event Booking App. All rights reserved.
+</footer>
+</body>
+</html>
